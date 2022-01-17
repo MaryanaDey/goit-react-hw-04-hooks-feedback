@@ -1,52 +1,57 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import Section from './Section';
 import Controls from './Controls';
 import Statistics from './Statistics';
 import s from './Feedback.module.css';
 
-export default class Feedback extends Component {
-  static defaultProps = {
-    initialValue: 0,
-  };
+export default function Feedback() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+  const state = { good, neutral, bad };
 
-  handleClick = e => {
+  const handleClick = e => {
     const { name } = e.currentTarget;
-    this.setState(prevState => {
-      return {
-        [name]: prevState[name] + 1,
-      };
-    });
+
+    switch (name) {
+      case 'good':
+        setGood(state => state + 1);
+        break;
+      case 'neutral':
+        setNeutral(state => state + 1);
+        break;
+      case 'bad':
+        setBad(state => state + 1);
+        break;
+      default:
+        return;
+    }
   };
 
-  countTotalFeedback = () => {
-    return this.state.good + this.state.bad + this.state.neutral;
+  const countTotalFeedback = () => {
+    return good + bad + neutral;
   };
 
-  countPositiveFeedbackPercentage = () => {
-    return Math.round((this.state.good * 100) / this.countTotalFeedback());
+  const countPositiveFeedbackPercentage = () => {
+    return Math.round((good * 100) / countTotalFeedback());
   };
-  render() {
-    return (
-      <div className={s.container}>
-        <Section>
-          <Controls options={this.state} onLeaveFeedback={this.handleClick} />
-        </Section>
-        <Section title="Statistics">
-          <Statistics
-            good={this.state.good}
-            neutral={this.state.neutral}
-            bad={this.state.bad}
-            total={this.countTotalFeedback()}
-            positivePercentage={this.countPositiveFeedbackPercentage()}
-          />
-        </Section>
-      </div>
-    );
-  }
+
+  return (
+    <div className={s.container}>
+      <Section title="Пожалуйста, оставьте свой отзыв!">
+        <Controls options={state} onLeaveFeedback={handleClick} />
+      </Section>
+
+      <Section title="Statistics">
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={countTotalFeedback()}
+          positivePercentage={countPositiveFeedbackPercentage()}
+        />
+      </Section>
+    </div>
+  );
 }
