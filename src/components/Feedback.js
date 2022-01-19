@@ -11,9 +11,7 @@ export default function Feedback() {
 
   const state = { good, neutral, bad };
 
-  const handleClick = e => {
-    const { name } = e.currentTarget;
-
+  const handleClick = name => {
     switch (name) {
       case 'good':
         setGood(state => state + 1);
