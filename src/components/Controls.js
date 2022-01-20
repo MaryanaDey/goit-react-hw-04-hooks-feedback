@@ -11,7 +11,7 @@ export default function Controls({ options, onLeaveFeedback }) {
           key={Math.random(3)}
           name={item}
           type="button"
-          onClick={e => onLeaveFeedback(e.currentTarget.name)}
+          onClick={e => onLeaveFeedback(Option)}
           className={s.btn}
         >
           {['Good', 'Neutral', 'Bad'][ind]}
